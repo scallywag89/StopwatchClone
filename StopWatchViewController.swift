@@ -13,11 +13,16 @@ class StopWatchViewController: UIViewController {
     @IBOutlet var timerLabel: UILabel!
     @IBOutlet var lapResetButton: UIButton!
     
+    var timer:Timer = Timer()
+    var count:Int = 0
+    var isTiming:Bool = false
+    
     override func viewDidLoad() {
         super.viewDidLoad()
+        lapResetButton.layer.cornerRadius = lapResetButton.frame.width/2
+        startStopButton.layer.cornerRadius = startStopButton.frame.width/2
         // Do any additional setup after loading the view.
     }
 
 
 }
-
