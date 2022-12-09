@@ -26,4 +26,10 @@ class Round_Button: UIButton {
             self.layer.borderColor = borderColor.cgColor
         }
     }
+    
+    @IBInspectable override var backgroundColor: UIColor? {
+        didSet {
+            self.layer.backgroundColor = backgroundColor?.cgColor
+        }
+    }
 }

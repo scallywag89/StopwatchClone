@@ -10,19 +10,60 @@ import UIKit
 class StopWatchViewController: UIViewController {
     
     @IBOutlet var startStopButton: UIButton!
-    @IBOutlet var timerLabel: UILabel!
+    @IBOutlet var minutesLabel: UILabel!
+    @IBOutlet var secondsLabel: UILabel!
+    @IBOutlet var fractionalLabel: UILabel!
     @IBOutlet var lapResetButton: UIButton!
     
     var timer:Timer = Timer()
-    var count:Int = 0
+    var (minutes, seconds, fractions) = (0, 0, 0)
     var isTiming:Bool = false
     
     override func viewDidLoad() {
         super.viewDidLoad()
         lapResetButton.layer.cornerRadius = lapResetButton.frame.width/2
         startStopButton.layer.cornerRadius = startStopButton.frame.width/2
-        // Do any additional setup after loading the view.
     }
-
-
+    
+    @IBAction func lapResetTapped(_ sender: Any) {
+        
+    }
+    
+    
+    @IBAction func startStopTapped(_ sender: UIButton) {
+        if(!isTiming) {
+            timer = Timer.scheduledTimer(timeInterval: 0.01, target: self, selector: #selector(timerStarted), userInfo: nil, repeats: true)
+            isTiming = true
+            startStopButton.setTitle("Stop", for: .normal)
+        } else {
+            isTiming = false
+            timer.invalidate()
+            startStopButton.setTitle("Start", for: .normal)
+            
+        }
+        
+    }
+    
+    @objc func timerStarted() {
+        fractions += 1
+        
+        if fractions > 99 {
+            seconds += 1
+            fractions = 0
+        }
+        
+        if seconds == 60 {
+            minutes += 1
+            seconds = 0
+        }
+        
+        let secondsString = seconds > 9 ? "\(seconds)" : "0\(seconds)"
+        let minutesString = minutes > 9 ? "\(minutes)" : "0\(minutes)"
+        
+        minutesLabel.text = "\(minutesString):"
+        secondsLabel.text = "\(secondsString)"
+        fractionalLabel.text = ".\(fractions)"
+    }
+    
+    
 }
