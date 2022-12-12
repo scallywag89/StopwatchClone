@@ -10,10 +10,13 @@ import UIKit
 class StopWatchViewController: UIViewController {
     
     @IBOutlet var startStopButton: UIButton!
+    @IBOutlet var lapResetButton: UIButton!
+    
     @IBOutlet var minutesLabel: UILabel!
     @IBOutlet var secondsLabel: UILabel!
     @IBOutlet var fractionalLabel: UILabel!
-    @IBOutlet var lapResetButton: UIButton!
+    
+    
     
     var timer:Timer = Timer()
     var (minutes, seconds, fractions) = (0, 0, 0)
@@ -25,9 +28,6 @@ class StopWatchViewController: UIViewController {
         startStopButton.layer.cornerRadius = startStopButton.frame.width/2
     }
     
-    @IBAction func lapResetTapped(_ sender: Any) {
-        
-    }
     
     
     @IBAction func startStopTapped(_ sender: UIButton) {
@@ -35,14 +35,26 @@ class StopWatchViewController: UIViewController {
             timer = Timer.scheduledTimer(timeInterval: 0.01, target: self, selector: #selector(timerStarted), userInfo: nil, repeats: true)
             isTiming = true
             startStopButton.setTitle("Stop", for: .normal)
+            lapResetButton.setTitle("Lap", for: .normal)
         } else {
             isTiming = false
             timer.invalidate()
             startStopButton.setTitle("Start", for: .normal)
+            lapResetButton.setTitle("Reset", for: .normal)
             
         }
         
     }
+    
+    
+    @IBAction func lapResetTapped(_ sender: Any) {
+        (minutes, seconds, fractions) = (0, 0, 0)
+        minutesLabel.text = "00:"
+        secondsLabel.text = "00"
+        fractionalLabel.text = ".00"
+        lapResetButton.setTitle("Lap", for: .normal)
+    }
+    
     
     @objc func timerStarted() {
         fractions += 1
