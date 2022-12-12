@@ -5,6 +5,9 @@
 //  Created by Bennett Mackenzie on 7/12/2022.
 //
 
+//  TODO: change button color on click
+//  TODO: add table cell when lap button is pressed
+
 import UIKit
 
 class StopWatchViewController: UIViewController {
@@ -16,7 +19,8 @@ class StopWatchViewController: UIViewController {
     @IBOutlet var secondsLabel: UILabel!
     @IBOutlet var fractionalLabel: UILabel!
     
-    
+    var laps = [String]()
+    var lapCount = 0
     
     var timer:Timer = Timer()
     var (minutes, seconds, fractions) = (0, 0, 0)
@@ -53,6 +57,7 @@ class StopWatchViewController: UIViewController {
         secondsLabel.text = "00"
         fractionalLabel.text = ".00"
         lapResetButton.setTitle("Lap", for: .normal)
+        newLap()
     }
     
     
@@ -77,5 +82,9 @@ class StopWatchViewController: UIViewController {
         fractionalLabel.text = ".\(fractions)"
     }
     
-    
+    func newLap() {
+        lapCount += 1
+        laps.append("Lap \(lapCount)")
+        print(laps)
+    }
 }
