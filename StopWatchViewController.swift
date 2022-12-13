@@ -52,12 +52,16 @@ class StopWatchViewController: UIViewController {
     
     
     @IBAction func lapResetTapped(_ sender: Any) {
-        (minutes, seconds, fractions) = (0, 0, 0)
-        minutesLabel.text = "00:"
-        secondsLabel.text = "00"
-        fractionalLabel.text = ".00"
-        lapResetButton.setTitle("Lap", for: .normal)
-        newLap()
+        if(!isTiming) {
+            (minutes, seconds, fractions) = (0, 0, 0)
+            minutesLabel.text = "00:"
+            secondsLabel.text = "00"
+            fractionalLabel.text = ".00"
+            lapResetButton.setTitle("Lap", for: .normal)
+        } else {
+            newLap()
+        }
+        
     }
     
     
@@ -87,4 +91,5 @@ class StopWatchViewController: UIViewController {
         laps.append("Lap \(lapCount)")
         print(laps)
     }
+    
 }
