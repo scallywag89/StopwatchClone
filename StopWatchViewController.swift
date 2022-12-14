@@ -10,7 +10,7 @@
 
 import UIKit
 
-class StopWatchViewController: UIViewController {
+class StopWatchViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
     
     @IBOutlet var startStopButton: UIButton!
     @IBOutlet var lapResetButton: UIButton!
@@ -19,8 +19,12 @@ class StopWatchViewController: UIViewController {
     @IBOutlet var secondsLabel: UILabel!
     @IBOutlet var fractionalLabel: UILabel!
     
+    @IBOutlet var tableView: UITableView!
+    
+    
     var laps = [String]()
     var lapCount = 0
+
     
     var timer:Timer = Timer()
     var (minutes, seconds, fractions) = (0, 0, 0)
@@ -28,10 +32,14 @@ class StopWatchViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        tableView.delegate = self
+        tableView.dataSource = self
+        
         lapResetButton.layer.cornerRadius = lapResetButton.frame.width/2
         startStopButton.layer.cornerRadius = startStopButton.frame.width/2
     }
-    
+
     
     
     @IBAction func startStopTapped(_ sender: UIButton) {
@@ -90,6 +98,18 @@ class StopWatchViewController: UIViewController {
         lapCount += 1
         laps.append("Lap \(lapCount)")
         print(laps)
+    }
+        
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return laps.count
+    }
+    
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath)
+        
+        cell.textLabel?.text = laps[indexPath.row]
+        
+        return cell
     }
     
 }
