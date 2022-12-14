@@ -64,6 +64,7 @@ class StopWatchViewController: UIViewController, UITableViewDelegate, UITableVie
             secondsLabel.text = "00"
             fractionalLabel.text = ".00"
             lapResetButton.setTitle("Lap", for: .normal)
+            resetLaps()
         } else {
             newLap()
         }
@@ -97,6 +98,11 @@ class StopWatchViewController: UIViewController, UITableViewDelegate, UITableVie
         laps.insert(lap, at: 0)
         let indexPath:IndexPath = IndexPath(row: 0, section: 0)
         tableView.insertRows(at: [indexPath], with: .automatic)
+    }
+    
+    func resetLaps() {
+        laps.removeAll()
+        tableView.reloadData()
     }
         
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
