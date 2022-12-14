@@ -23,8 +23,6 @@ class StopWatchViewController: UIViewController, UITableViewDelegate, UITableVie
     
     
     var laps = [String]()
-    var lapCount = 0
-
     
     var timer:Timer = Timer()
     var (minutes, seconds, fractions) = (0, 0, 0)
@@ -95,9 +93,10 @@ class StopWatchViewController: UIViewController, UITableViewDelegate, UITableVie
     }
     
     func newLap() {
-        lapCount += 1
-        laps.append("Lap \(lapCount)")
-        print(laps)
+        let lap:String = "Lap \(laps.count + 1)"
+        laps.insert(lap, at: 0)
+        let indexPath:IndexPath = IndexPath(row: 0, section: 0)
+        tableView.insertRows(at: [indexPath], with: .automatic)
     }
         
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -105,9 +104,10 @@ class StopWatchViewController: UIViewController, UITableViewDelegate, UITableVie
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath)
+        let cell:UITableViewCell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath)
         
         cell.textLabel?.text = laps[indexPath.row]
+        cell.textLabel?.textColor = UIColor.white
         
         return cell
     }
