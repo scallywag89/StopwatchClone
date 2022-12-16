@@ -10,7 +10,7 @@
 
 import UIKit
 
-class StopWatchViewController: UIViewController {
+class StopWatchViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
     
     @IBOutlet var startStopButton: UIButton!
     @IBOutlet var lapResetButton: UIButton!
@@ -19,8 +19,11 @@ class StopWatchViewController: UIViewController {
     @IBOutlet var secondsLabel: UILabel!
     @IBOutlet var fractionalLabel: UILabel!
     
+    @IBOutlet var tableView: UITableView!
+    
+    
     var laps = [String]()
-    var lapCount = 0
+    var timeString:String = String()
     
     var timer:Timer = Timer()
     var (minutes, seconds, fractions) = (0, 0, 0)
@@ -28,10 +31,14 @@ class StopWatchViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        tableView.delegate = self
+        tableView.dataSource = self
+        
         lapResetButton.layer.cornerRadius = lapResetButton.frame.width/2
         startStopButton.layer.cornerRadius = startStopButton.frame.width/2
     }
-    
+
     
     
     @IBAction func startStopTapped(_ sender: UIButton) {
@@ -58,6 +65,7 @@ class StopWatchViewController: UIViewController {
             secondsLabel.text = "00"
             fractionalLabel.text = ".00"
             lapResetButton.setTitle("Lap", for: .normal)
+            resetLaps()
         } else {
             newLap()
         }
@@ -78,18 +86,41 @@ class StopWatchViewController: UIViewController {
             seconds = 0
         }
         
+        let fractionString = fractions > 9 ? "\(fractions)" : "0\(fractions)"
         let secondsString = seconds > 9 ? "\(seconds)" : "0\(seconds)"
         let minutesString = minutes > 9 ? "\(minutes)" : "0\(minutes)"
+        timeString = "\(minutesString):\(secondsString).\(fractionString)"
         
         minutesLabel.text = "\(minutesString):"
         secondsLabel.text = "\(secondsString)"
-        fractionalLabel.text = ".\(fractions)"
+        fractionalLabel.text = ".\(fractionString)"
+        
     }
     
     func newLap() {
-        lapCount += 1
-        laps.append("Lap \(lapCount)")
-        print(laps)
+        let lap:String = "\(timeString)"
+        laps.insert(lap, at: 0)
+        let indexPath:IndexPath = IndexPath(row: 0, section: 0)
+        tableView.insertRows(at: [indexPath], with: .automatic)
+    }
+    
+    func resetLaps() {
+        laps.removeAll()
+        tableView.reloadData()
+    }
+        
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return laps.count
+    }
+    
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell:UITableViewCell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath)
+        
+        cell.textLabel?.text = "Lap \(laps.count - indexPath.row)"
+        cell.textLabel?.textColor = UIColor.white
+        cell.detailTextLabel?.text = "\(timeString)"
+        cell.detailTextLabel?.textColor = UIColor.white
+        return cell
     }
     
 }
