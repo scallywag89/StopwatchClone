@@ -23,6 +23,7 @@ class StopWatchViewController: UIViewController, UITableViewDelegate, UITableVie
     
     
     var laps = [String]()
+    var timeString:String = String()
     
     var timer:Timer = Timer()
     var (minutes, seconds, fractions) = (0, 0, 0)
@@ -85,16 +86,19 @@ class StopWatchViewController: UIViewController, UITableViewDelegate, UITableVie
             seconds = 0
         }
         
+        let fractionString = fractions > 9 ? "\(fractions)" : "0\(fractions)"
         let secondsString = seconds > 9 ? "\(seconds)" : "0\(seconds)"
         let minutesString = minutes > 9 ? "\(minutes)" : "0\(minutes)"
+        timeString = "\(minutesString):\(secondsString).\(fractionString)"
         
         minutesLabel.text = "\(minutesString):"
         secondsLabel.text = "\(secondsString)"
-        fractionalLabel.text = ".\(fractions)"
+        fractionalLabel.text = ".\(fractionString)"
+        
     }
     
     func newLap() {
-        let lap:String = "Lap \(laps.count + 1)"
+        let lap:String = "\(timeString)"
         laps.insert(lap, at: 0)
         let indexPath:IndexPath = IndexPath(row: 0, section: 0)
         tableView.insertRows(at: [indexPath], with: .automatic)
@@ -112,9 +116,10 @@ class StopWatchViewController: UIViewController, UITableViewDelegate, UITableVie
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell:UITableViewCell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath)
         
-        cell.textLabel?.text = laps[indexPath.row]
+        cell.textLabel?.text = "Lap \(laps.count - indexPath.row)"
         cell.textLabel?.textColor = UIColor.white
-        
+        cell.detailTextLabel?.text = "\(timeString)"
+        cell.detailTextLabel?.textColor = UIColor.white
         return cell
     }
     
