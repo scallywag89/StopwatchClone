@@ -5,9 +5,6 @@
 //  Created by Bennett Mackenzie on 7/12/2022.
 //
 
-//  TODO: change button color on click
-//  TODO: add table cell when lap button is pressed
-
 import UIKit
 
 class StopWatchViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
@@ -34,13 +31,14 @@ class StopWatchViewController: UIViewController, UITableViewDelegate, UITableVie
         
         tableView.delegate = self
         tableView.dataSource = self
-        
+    }
+    
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
         lapResetButton.layer.cornerRadius = lapResetButton.frame.width/2
         startStopButton.layer.cornerRadius = startStopButton.frame.width/2
     }
-
-    
-    
+        
     @IBAction func startStopTapped(_ sender: UIButton) {
         if(!isTiming) {
             timer = Timer.scheduledTimer(timeInterval: 0.01, target: self, selector: #selector(timerStarted), userInfo: nil, repeats: true)
