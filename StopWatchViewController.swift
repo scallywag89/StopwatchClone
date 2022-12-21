@@ -9,22 +9,22 @@ import UIKit
 
 class StopWatchViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
     
-    @IBOutlet var startStopButton: UIButton!
-    @IBOutlet var lapResetButton: UIButton!
+    @IBOutlet private var startStopButton: UIButton!
+    @IBOutlet private var lapResetButton: UIButton!
     
-    @IBOutlet var minutesLabel: UILabel!
-    @IBOutlet var secondsLabel: UILabel!
-    @IBOutlet var fractionalLabel: UILabel!
+    @IBOutlet private var minutesLabel: UILabel!
+    @IBOutlet private var secondsLabel: UILabel!
+    @IBOutlet private var fractionalLabel: UILabel!
     
-    @IBOutlet var tableView: UITableView!
+    @IBOutlet private var tableView: UITableView!
     
     
-    var laps = [String]()
-    var timeString:String = String()
+    private var laps = [String]()
+    private var timeString:String = String()
     
-    var timer:Timer = Timer()
-    var (minutes, seconds, fractions) = (0, 0, 0)
-    var isTiming:Bool = false
+    private var timer:Timer = Timer()
+    private var (minutes, seconds, fractions) = (0, 0, 0)
+    private var isTiming:Bool = false
     
     override func viewDidLoad() {
         super.viewDidLoad()
