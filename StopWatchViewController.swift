@@ -23,7 +23,7 @@ class StopWatchViewController: UIViewController, UITableViewDelegate, UITableVie
     private var timeString:String = String()
     
     private var timer:Timer = Timer()
-    private var (minutes, seconds, fractions) = (0, 0, 0)
+    private var elapsedTime:Float = 0.0
     private var isTiming:Bool = false
     
     override func viewDidLoad() {
@@ -45,6 +45,7 @@ class StopWatchViewController: UIViewController, UITableViewDelegate, UITableVie
             isTiming = true
             startStopButton.setTitle("Stop", for: .normal)
             lapResetButton.setTitle("Lap", for: .normal)
+        
         } else {
             isTiming = false
             timer.invalidate()
@@ -58,7 +59,6 @@ class StopWatchViewController: UIViewController, UITableViewDelegate, UITableVie
     
     @IBAction func lapResetTapped(_ sender: Any) {
         if(!isTiming) {
-            (minutes, seconds, fractions) = (0, 0, 0)
             minutesLabel.text = "00:"
             secondsLabel.text = "00"
             fractionalLabel.text = ".00"
@@ -72,26 +72,27 @@ class StopWatchViewController: UIViewController, UITableViewDelegate, UITableVie
     
     
     @objc func timerStarted() {
-        fractions += 1
-        
-        if fractions > 99 {
-            seconds += 1
-            fractions = 0
-        }
-        
-        if seconds == 60 {
-            minutes += 1
-            seconds = 0
-        }
-        
-        let fractionString = fractions > 9 ? "\(fractions)" : "0\(fractions)"
-        let secondsString = seconds > 9 ? "\(seconds)" : "0\(seconds)"
-        let minutesString = minutes > 9 ? "\(minutes)" : "0\(minutes)"
-        timeString = "\(minutesString):\(secondsString).\(fractionString)"
-        
-        minutesLabel.text = "\(minutesString):"
-        secondsLabel.text = "\(secondsString)"
-        fractionalLabel.text = ".\(fractionString)"
+        elapsedTime += 1
+//        fractions += 1
+//
+//        if fractions > 99 {
+//            seconds += 1
+//            fractions = 0
+//        }
+//
+//        if seconds == 60 {
+//            minutes += 1
+//            seconds = 0
+//        }
+//
+//        let fractionString = fractions > 9 ? "\(fractions)" : "0\(fractions)"
+//        let secondsString = seconds > 9 ? "\(seconds)" : "0\(seconds)"
+//        let minutesString = minutes > 9 ? "\(minutes)" : "0\(minutes)"
+//        timeString = "\(minutesString):\(secondsString).\(fractionString)"
+//
+//        minutesLabel.text = "\(minutesString):"
+//        secondsLabel.text = "\(secondsString)"
+//        fractionalLabel.text = ".\(fractionString)"
         
     }
     
