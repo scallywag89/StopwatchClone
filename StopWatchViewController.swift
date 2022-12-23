@@ -19,6 +19,7 @@ class StopWatchViewController: UIViewController, UITableViewDelegate, UITableVie
     
     
     private var laps = [Float]()
+    private var lapStrings = [String]()
     
     private var timer:Timer = Timer()
     private var elapsedTime:Float = 0.0
@@ -82,17 +83,21 @@ class StopWatchViewController: UIViewController, UITableViewDelegate, UITableVie
     
     func newLap() {
         let lap:Float = elapsedTime
+        let lapString:String = convertMilliseconds(elapsedTime)
         laps.append(lap)
+        lapStrings.append(lapString)
         print(laps)
+        print(lapStrings)
         tableView.reloadData()
     }
     
     func resetLaps() {
         elapsedTime = 0.0
         laps.removeAll()
+        lapStrings.removeAll()
         tableView.reloadData()
     }
-        
+    
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return laps.count
     }
@@ -103,8 +108,9 @@ class StopWatchViewController: UIViewController, UITableViewDelegate, UITableVie
         cell.textLabel?.text = "Lap \(laps.count - indexPath.row)"
         cell.textLabel?.textColor = UIColor.white
         
-        cell.detailTextLabel?.text = "\(laps.reversed()[indexPath.row])"
+        cell.detailTextLabel?.text = "\(lapStrings.reversed()[indexPath.row])"
         cell.detailTextLabel?.textColor = UIColor.white
+        
         return cell
     }
     
