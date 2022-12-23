@@ -12,9 +12,8 @@ class StopWatchViewController: UIViewController, UITableViewDelegate, UITableVie
     @IBOutlet private var startStopButton: UIButton!
     @IBOutlet private var lapResetButton: UIButton!
     
-    @IBOutlet private var minutesLabel: UILabel!
-    @IBOutlet private var secondsLabel: UILabel!
-    @IBOutlet private var fractionalLabel: UILabel!
+
+    @IBOutlet private var timeLabel: UILabel!
     
     @IBOutlet private var tableView: UITableView!
     
@@ -59,9 +58,7 @@ class StopWatchViewController: UIViewController, UITableViewDelegate, UITableVie
     
     @IBAction func lapResetTapped(_ sender: Any) {
         if(!isTiming) {
-            minutesLabel.text = "00:"
-            secondsLabel.text = "00"
-            fractionalLabel.text = ".00"
+            timeLabel.text = "00:00.00"
             lapResetButton.setTitle("Lap", for: .normal)
             resetLaps()
         } else {
@@ -73,31 +70,19 @@ class StopWatchViewController: UIViewController, UITableViewDelegate, UITableVie
     
     @objc func timerStarted() {
         elapsedTime += 1
-//        fractions += 1
-//
-//        if fractions > 99 {
-//            seconds += 1
-//            fractions = 0
-//        }
-//
-//        if seconds == 60 {
-//            minutes += 1
-//            seconds = 0
-//        }
-//
-//        let fractionString = fractions > 9 ? "\(fractions)" : "0\(fractions)"
-//        let secondsString = seconds > 9 ? "\(seconds)" : "0\(seconds)"
-//        let minutesString = minutes > 9 ? "\(minutes)" : "0\(minutes)"
-//        timeString = "\(minutesString):\(secondsString).\(fractionString)"
-//
-//        minutesLabel.text = "\(minutesString):"
-//        secondsLabel.text = "\(secondsString)"
-//        fractionalLabel.text = ".\(fractionString)"
-        
+        timeLabel.text = "\(convertMilliseconds(elapsedTime))"
+    }
+    
+    func convertMilliseconds(_: Float) -> String {
+        let time = NSDate(timeIntervalSince1970: Double(elapsedTime / 100))
+        let formatter = DateFormatter()
+        formatter.timeZone = TimeZone(identifier: "UTC")
+        formatter.dateFormat = "mm:ss.SS"
+        return formatter.string(from: time as Date)
     }
     
     func newLap() {
-        let lap:String = "\(timeString)"
+        let lap:String = "\(convertMilliseconds(elapsedTime))"
         laps.insert(lap, at: 0)
         let indexPath:IndexPath = IndexPath(row: 0, section: 0)
         tableView.insertRows(at: [indexPath], with: .automatic)
