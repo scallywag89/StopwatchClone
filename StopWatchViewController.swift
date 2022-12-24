@@ -12,15 +12,14 @@ class StopWatchViewController: UIViewController, UITableViewDelegate, UITableVie
     @IBOutlet private var startStopButton: UIButton!
     @IBOutlet private var lapResetButton: UIButton!
     
-    @IBOutlet private var minutesLabel: UILabel!
-    @IBOutlet private var secondsLabel: UILabel!
-    @IBOutlet private var fractionalLabel: UILabel!
+
+    @IBOutlet private var timeLabel: UILabel!
     
     @IBOutlet private var tableView: UITableView!
     
     
-    private var laps = [String]()
-    private var timeString:String = String()
+    private var laps = [Float]()
+    private var lapStrings = [String]()
     
     private var timer:Timer = Timer()
     private var elapsedTime:Float = 0.0
@@ -59,9 +58,7 @@ class StopWatchViewController: UIViewController, UITableViewDelegate, UITableVie
     
     @IBAction func lapResetTapped(_ sender: Any) {
         if(!isTiming) {
-            minutesLabel.text = "00:"
-            secondsLabel.text = "00"
-            fractionalLabel.text = ".00"
+            timeLabel.text = "00:00.00"
             lapResetButton.setTitle("Lap", for: .normal)
             resetLaps()
         } else {
@@ -73,41 +70,33 @@ class StopWatchViewController: UIViewController, UITableViewDelegate, UITableVie
     
     @objc func timerStarted() {
         elapsedTime += 1
-//        fractions += 1
-//
-//        if fractions > 99 {
-//            seconds += 1
-//            fractions = 0
-//        }
-//
-//        if seconds == 60 {
-//            minutes += 1
-//            seconds = 0
-//        }
-//
-//        let fractionString = fractions > 9 ? "\(fractions)" : "0\(fractions)"
-//        let secondsString = seconds > 9 ? "\(seconds)" : "0\(seconds)"
-//        let minutesString = minutes > 9 ? "\(minutes)" : "0\(minutes)"
-//        timeString = "\(minutesString):\(secondsString).\(fractionString)"
-//
-//        minutesLabel.text = "\(minutesString):"
-//        secondsLabel.text = "\(secondsString)"
-//        fractionalLabel.text = ".\(fractionString)"
-        
+        timeLabel.text = "\(convertMilliseconds(elapsedTime))"
+    }
+
+    func convertMilliseconds(_: Float) -> String {
+        let time = NSDate(timeIntervalSince1970: Double(elapsedTime / 100))
+        let formatter = DateFormatter()
+        formatter.timeZone = TimeZone(identifier: "UTC")
+        formatter.dateFormat = "mm:ss.SS"
+        return formatter.string(from: time as Date)
     }
     
     func newLap() {
-        let lap:String = "\(timeString)"
-        laps.insert(lap, at: 0)
-        let indexPath:IndexPath = IndexPath(row: 0, section: 0)
-        tableView.insertRows(at: [indexPath], with: .automatic)
+        let lap:Float = elapsedTime
+        let lapString:String = convertMilliseconds(elapsedTime)
+        laps.append(lap)
+        lapStrings.append(lapString)
+        tableView.reloadData()
     }
     
     func resetLaps() {
+        elapsedTime = 0.0
         laps.removeAll()
+        lapStrings.removeAll()
         tableView.reloadData()
     }
-        
+    
+    
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return laps.count
     }
@@ -117,8 +106,21 @@ class StopWatchViewController: UIViewController, UITableViewDelegate, UITableVie
         
         cell.textLabel?.text = "Lap \(laps.count - indexPath.row)"
         cell.textLabel?.textColor = UIColor.white
-        cell.detailTextLabel?.text = "\(timeString)"
+        
+        cell.detailTextLabel?.text = "\(lapStrings.reversed()[indexPath.row])"
         cell.detailTextLabel?.textColor = UIColor.white
+        
+//        if (lapStrings.sorted().first == lapStrings[indexPath.row]) {
+//            cell.detailTextLabel?.textColor = UIColor.green
+//        }
+//
+//        else if (lapStrings.sorted().last == lapStrings[indexPath.row]){
+//            cell.detailTextLabel?.textColor = UIColor.red
+//        }
+//
+//        else {
+//            cell.detailTextLabel?.textColor = UIColor.white
+//        }
         return cell
     }
     
