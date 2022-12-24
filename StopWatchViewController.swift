@@ -72,7 +72,7 @@ class StopWatchViewController: UIViewController, UITableViewDelegate, UITableVie
         elapsedTime += 1
         timeLabel.text = "\(convertMilliseconds(elapsedTime))"
     }
-    
+
     func convertMilliseconds(_: Float) -> String {
         let time = NSDate(timeIntervalSince1970: Double(elapsedTime / 100))
         let formatter = DateFormatter()
@@ -86,8 +86,6 @@ class StopWatchViewController: UIViewController, UITableViewDelegate, UITableVie
         let lapString:String = convertMilliseconds(elapsedTime)
         laps.append(lap)
         lapStrings.append(lapString)
-        print(laps)
-        print(lapStrings)
         tableView.reloadData()
     }
     
@@ -97,6 +95,7 @@ class StopWatchViewController: UIViewController, UITableViewDelegate, UITableVie
         lapStrings.removeAll()
         tableView.reloadData()
     }
+    
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return laps.count
@@ -111,6 +110,17 @@ class StopWatchViewController: UIViewController, UITableViewDelegate, UITableVie
         cell.detailTextLabel?.text = "\(lapStrings.reversed()[indexPath.row])"
         cell.detailTextLabel?.textColor = UIColor.white
         
+//        if (lapStrings.sorted().first == lapStrings[indexPath.row]) {
+//            cell.detailTextLabel?.textColor = UIColor.green
+//        }
+//
+//        else if (lapStrings.sorted().last == lapStrings[indexPath.row]){
+//            cell.detailTextLabel?.textColor = UIColor.red
+//        }
+//
+//        else {
+//            cell.detailTextLabel?.textColor = UIColor.white
+//        }
         return cell
     }
     
