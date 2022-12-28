@@ -43,17 +43,15 @@ class StopWatchViewController: UIViewController, UITableViewDelegate, UITableVie
             timer = Timer.scheduledTimer(timeInterval: 0.01, target: self, selector: #selector(timerStarted), userInfo: nil, repeats: true)
             isTiming = true
             startStopButton.setTitle("Stop", for: .normal)
-            startStopButton.layer.backgroundColor = CGColor(red: 61/255, green: 22/255, blue: 19/255, alpha: 1)
-            startStopButton.tintColor = UIColor(red: 152/255, green: 72/255, blue: 60/255, alpha: 1)
             lapResetButton.setTitle("Lap", for: .normal)
-            
-        } else {
+            updateButtonColorToRed()
+        }
+        else {
             isTiming = false
             timer.invalidate()
             startStopButton.setTitle("Start", for: .normal)
             lapResetButton.setTitle("Reset", for: .normal)
-            startStopButton.layer.backgroundColor = CGColor(red: 8/255, green: 42/255, blue: 18/255, alpha: 1)
-            startStopButton.tintColor = UIColor(red: 43/255, green: 197/255, blue: 81/255, alpha: 1)
+            updateButtonColorToGreen()
         }
         
     }
@@ -97,6 +95,16 @@ class StopWatchViewController: UIViewController, UITableViewDelegate, UITableVie
         laps.removeAll()
         lapStrings.removeAll()
         tableView.reloadData()
+    }
+    
+    func updateButtonColorToRed() {
+        startStopButton.layer.backgroundColor = CGColor(red: 61/255, green: 22/255, blue: 19/255, alpha: 1)
+        startStopButton.tintColor = UIColor(red: 214/255, green: 73/255, blue: 61/255, alpha: 1)
+    }
+    
+    func updateButtonColorToGreen() {
+        startStopButton.layer.backgroundColor = CGColor(red: 8/255, green: 42/255, blue: 18/255, alpha: 1)
+        startStopButton.tintColor = UIColor(red: 43/255, green: 197/255, blue: 81/255, alpha: 1)
     }
     
     
