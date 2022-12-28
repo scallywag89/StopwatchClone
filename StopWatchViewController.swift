@@ -71,11 +71,11 @@ class StopWatchViewController: UIViewController, UITableViewDelegate, UITableVie
     
     @objc func timerStarted() {
         elapsedTime += 1
-        timeLabel.text = "\(convertMilliseconds(elapsedTime))"
+        timeLabel.text = "\(convertMilliseconds(timeValue: elapsedTime))"
     }
 
-    func convertMilliseconds(_: Float) -> String {
-        let time = NSDate(timeIntervalSince1970: Double(elapsedTime / 100))
+    func convertMilliseconds(timeValue: Float) -> String {
+        let time = NSDate(timeIntervalSince1970: Double( timeValue / 100))
         let formatter = DateFormatter()
         formatter.timeZone = TimeZone(identifier: "UTC")
         formatter.dateFormat = "mm:ss.SS"
@@ -83,10 +83,16 @@ class StopWatchViewController: UIViewController, UITableViewDelegate, UITableVie
     }
     
     func newLap() {
-        let lap:Float = elapsedTime
-        let lapString:String = convertMilliseconds(elapsedTime)
-        laps.append(lap)
-        lapStrings.append(lapString)
+        if(laps.count < 1) {
+            let lap:Float = elapsedTime
+            laps.append(lap)
+            lapStrings.append(convertMilliseconds(timeValue: lap))
+        } else {
+            let lap:Float = elapsedTime - laps[laps.count - 1]
+            laps.append(lap)
+            let lapString:String = convertMilliseconds(timeValue: lap)
+            lapStrings.append(lapString)
+        }
         tableView.reloadData()
     }
     
@@ -120,18 +126,7 @@ class StopWatchViewController: UIViewController, UITableViewDelegate, UITableVie
         
         cell.detailTextLabel?.text = "\(lapStrings.reversed()[indexPath.row])"
         cell.detailTextLabel?.textColor = UIColor.white
-        
-//        if (lapStrings.sorted().first == lapStrings[indexPath.row]) {
-//            cell.detailTextLabel?.textColor = UIColor.green
-//        }
-//
-//        else if (lapStrings.sorted().last == lapStrings[indexPath.row]){
-//            cell.detailTextLabel?.textColor = UIColor.red
-//        }
-//
-//        else {
-//            cell.detailTextLabel?.textColor = UIColor.white
-//        }
+
         return cell
     }
     
