@@ -23,6 +23,7 @@ class StopWatchViewController: UIViewController, UITableViewDelegate, UITableVie
     
     private var timer:Timer = Timer()
     private var elapsedTime:Float = 0.0
+    private var lapTime:Float = 0.0
     private var isTiming:Bool = false
     
     override func viewDidLoad() {
@@ -65,12 +66,12 @@ class StopWatchViewController: UIViewController, UITableViewDelegate, UITableVie
         } else {
             newLap()
         }
-        
     }
     
     
     @objc func timerStarted() {
         elapsedTime += 1
+        lapTime += 1
         timeLabel.text = "\(convertMilliseconds(timeValue: elapsedTime))"
     }
 
@@ -83,16 +84,9 @@ class StopWatchViewController: UIViewController, UITableViewDelegate, UITableVie
     }
     
     func newLap() {
-        if(laps.count < 1) {
-            let lap:Float = elapsedTime
-            laps.append(lap)
-            lapStrings.append(convertMilliseconds(timeValue: lap))
-        } else {
-            let lap:Float = elapsedTime - laps[laps.count - 1]
-            laps.append(lap)
-            let lapString:String = convertMilliseconds(timeValue: lap)
-            lapStrings.append(lapString)
-        }
+        laps.append(lapTime)
+        lapStrings.append(convertMilliseconds(timeValue: lapTime))
+        lapTime = 0.0
         tableView.reloadData()
     }
     
